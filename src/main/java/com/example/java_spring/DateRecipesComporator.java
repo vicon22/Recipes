@@ -1,0 +1,10 @@
+package com.example.java_spring;
+
+import java.util.Comparator;
+
+public class DateRecipesComporator implements Comparator<Recipe> {
+    @Override
+    public int compare(Recipe o1, Recipe o2) {
+        return o1.getDate().compareTo((o2.getDate()));
+    }
+}
