@@ -1,7 +1,12 @@
 package com.example.java_spring;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +27,19 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getRecipe(@PathVariable Long id) {
+    public ResponseEntity<Recipe> getRecipe(@PathVariable Long id, Authentication auth) {
         //System.out.println(recipeService.findById(id));
-        return ResponseEntity.of(recipeService.findById(id));
+//        System.out.println("---------");
+//        System.out.println(auth.name());
+//        System.out.println("---------");
+        if (recipeService.findById(id).isPresent()) {
+            if (recipeService.findById(id).get().getChefsEmail().equals(auth.getName())) {
+                return ResponseEntity.of(recipeService.findById(id));
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/all")
@@ -34,7 +49,8 @@ public class RecipeController {
     }
 
     @PostMapping("/new")
-    public Map<String, Long> postRecipe(@RequestBody @Valid Recipe recipe) {
+    public Map<String, Long> postRecipe(@RequestBody @Valid Recipe recipe, Authentication auth) {
+        recipe.setChefsEmail(auth.getName());
         Long id = recipeService.save(recipe);
         return Map.of("id", id);
     }
@@ -51,7 +67,6 @@ public class RecipeController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Recipe>> searchRecipe(@RequestParam Map<String, String> param){
-        //System.out.println(param);
         if (param.containsKey("name") && param.size() == 1) {
             return ResponseEntity.of(recipeService.findByName(param.get("name")));
         }else if (param.containsKey("category") && param.size() == 1){
@@ -62,10 +77,14 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Recipe> deleteRecipe(@PathVariable Long id){
+    public ResponseEntity<Recipe> deleteRecipe(@PathVariable Long id, Authentication auth){
         if (recipeService.findById(id).isPresent()){
-            recipeService.deteleById(id);
-            return ResponseEntity.noContent().build();
+            if (recipeService.findById(id).get().getChefsEmail().equals(auth.getName())) {
+                recipeService.deteleById(id);
+                return ResponseEntity.noContent().build();
+            } else{
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         }else{
             return ResponseEntity.notFound().build();
         }

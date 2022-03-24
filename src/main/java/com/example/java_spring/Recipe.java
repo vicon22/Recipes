@@ -53,4 +53,9 @@ class Recipe{
     @Size(min = 1)
     @ElementCollection
     private List<String> directions = new ArrayList<>();
+
+    @Column(name = "chefs_email")
+    //@NotBlank
+    @JsonIgnore
+    private String chefsEmail;
 }
