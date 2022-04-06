@@ -1,18 +1,17 @@
 # Recipes Project
 ## Описание
-An urge to cook something special is too hard to resist sometimes. But what if you lost the recipe? Or your beloved grandma is too busy to answer a call and remind you of your favorite cake recipe? Let's make a program that stores all recipes in one place. Create a multi-user web service with Spring Boot that allows storing, retrieving, updating, and deleting recipes.
+Создадим программу, которая хранит все рецепты в одном месте. Многопользовательский веб-сервис созданное с помощью Java/Spring Boot/Spring Security, который позволяет хранить, извлекать, обновлять и удалять рецепты.
 
-### Recipe
-Application for storing recipies created with Java/Spring/Spring Security.
-Graduate project for Java Backend Developer jetBrain Academy.
+Выпускной проект  Java Backend Developer JetBrain Academy.
 
 ### Main Features:
-* Registration/Login for users, all aplication is available only for registered users.
-* Validation of email adress structure.
-* Authentication - users can edit and delete only recipies created by their own.
-* Verification of sended recipies, no field can be empty.
-* Serching recipies by category or by name.
-* Storing recipies in database implemented with data transfered objects.
+* Registration/Login пользователей.
+* Доступ к рецептам только у зарегистрированных пользователей.
+* Проверка структуры адреса электронной почты.
+* Authentication - пользователи могут редактировать и удалять только рецепты, созданные ими самостоятельно.
+* Проверка отправленных рецептов, ни одно поле не может быть пустым.
+* Поиск рецептов по категориям или по названию.
+* Хранение рецептов в базе данных.
 
 ## Примеры
 Пример 1: ___`POST /api/recipe/new` запрос без аутентификации___
